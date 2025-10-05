@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "name": "cloudbusters-air-quality-monorepo",
+  "builds": [
+    {
+      "src": "FrontEnd/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "buildCommand": "cd FrontEnd && npm ci && npm run build",
+        "outputDirectory": "FrontEnd/dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/assets/(.*)",
+      "headers": {
+        "cache-control": "public, max-age=31536000, immutable"
+      }
+    },
+    {
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/FrontEnd/dist/index.html"
+    }
+  ],
+  "functions": {},
+  "rewrites": [
+    {
+      "source": "/(.*)",
+      "destination": "/FrontEnd/dist/index.html"
+    }
+  ]
+}
